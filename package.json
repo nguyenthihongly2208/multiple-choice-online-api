@@ -1,0 +1,24 @@
+{
+  "name": "multiple-choice-online-api",
+  "version": "1.0.0",
+  "description": "Backend using RESTful JSON api using Nodejs, Express and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huynhduckhoan/multiple-choice-online-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huynhduckhoan/multiple-choice-online-api/issues"
+  },
+  "homepage": "https://github.com/huynhduckhoan/multiple-choice-online-api#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongoose": "^5.0.18"
+  }
+}
