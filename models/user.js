@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 const db = require('../utils/db');
 
 var userSchema = new Schema({
+    userID: {
+        type: String, 
+        required: true, 
+        unique: true},   
 	email: {
         type: String, 
         required: true, 
@@ -12,7 +16,8 @@ var userSchema = new Schema({
         required: true },
     role:  { 
         type: String, 
-        required: true },
+        required: true,
+        default: 'user'},
     name: String,
     prename: String,
     school: String,
@@ -22,10 +27,6 @@ var userSchema = new Schema({
 })
 
 const User = mongoose.model('User', userSchema);
-
-var getUser = (callback, limit) => {
-	User.find(callback).limit(limit);
-}
 
 module.exports = {
     User

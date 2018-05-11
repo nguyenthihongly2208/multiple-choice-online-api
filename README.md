@@ -42,5 +42,6 @@ URL data: [https://mlab.com/databases/multiple-choice-online](https://mlab.com/d
 ### [0.0.2] - 2018-05-11
 - Test save success.
 - Get/post user route. 
+- Get/put user/{userID} route. 
 - Update API document.
 

@@ -12,5 +12,3 @@ const con = mongoose.connect(mlabURI, (error) => {
 });
 
 module.exports = con;
-
-// console.log(mongoose.connection.readyState);
