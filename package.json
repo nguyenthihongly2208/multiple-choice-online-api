@@ -2,7 +2,7 @@
   "name": "multiple-choice-online-api",
   "version": "0.0.2",
   "description": "Backend using RESTful JSON api using Nodejs, Express and MongoDB",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
