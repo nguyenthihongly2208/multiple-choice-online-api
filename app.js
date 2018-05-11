@@ -1,9 +1,6 @@
-const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
+const db = require('./utils/db');
+const app = require('./routes');
 
-const app = express();
-
-const mlabURI = 'mongodb://huynhduckhoan:huynhduckhoan@ds143907.mlab.com:43907/multiple-choice-online'
-
-mongoose.connect(mlabURI);
+app.listen(3000, function() {
+    console.log('listening on 3000');
+})
