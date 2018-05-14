@@ -4,7 +4,7 @@ Backend using RESTful JSON api using Nodejs, Express and MongoDB
 ![Npm version](https://img.shields.io/badge/npm-v5.6.0-blue.svg)
 ![Note version](https://img.shields.io/badge/node-v10.1.0-blue.svg)
 ![Document version](https://img.shields.io/badge/docs%20version-v0.2.0-blue.svg)
-![Project version](https://img.shields.io/badge/project%20version-v0.0.0-blue.svg)
+![Project version](https://img.shields.io/badge/project%20version-v0.1.0-blue.svg)
 ![Build passing](https://img.shields.io/badge/build-passing-brightgreen.svg)
 ![Goal progress](https://img.shields.io/badge/goal%20progress%3A-22%25-red.svg)
 
@@ -45,6 +45,6 @@ URL data: [https://mlab.com/databases/multiple-choice-online](https://mlab.com/d
 - Get/put user/{userID} route. 
 - Update API document.
 ### [0.1.0] - 2018-05-14
-- Update bank, group
+- Update bank, group, question CRUD
 - Update API document.
-- Update ID from interger to string
+- Update ID from integer to string

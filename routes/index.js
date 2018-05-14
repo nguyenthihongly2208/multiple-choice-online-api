@@ -6,6 +6,7 @@ const db = require('../utils/db');
 const {User} = require('../models/user');
 const {Bank} = require('../models/bank');
 const {Group} = require('../models/group');
+const {Question} = require('../models/question');
 
 app.use(bodyParser.json())
 
@@ -161,12 +162,22 @@ app.post('/group', (req, res) => {
     qgName: req.body.qgName,
     qgDescription: req.body.qgDescription
   });
-  // result = User.addUser(user);
   group.save().then((group) => {
     res.send(group);
   }, (e) => {
     res.status(400).send(e);
   });
+});
+
+app.get('/group/:qgID', (req, res) => {
+  var query = { qgID: req.params.qgID };
+
+  Question.find(query).then((group) => {
+    res.send(group);
+  }, (e) => {
+    res.status(404).send('Question not found');
+  });
+
 });
 
 app.put('/group/:qgID', (req, res) => {
@@ -197,6 +208,59 @@ app.delete('/group/:qbID', (req, res) => {
 });
 /* End group route */
 
+/* Question route */
+app.get('/question', (req, res) => {
+  Question.find().then((question) => {
+    res.send({question});
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
 
+app.post('/question', (req, res) => {
+  var question = new Question({
+    qID: req.body.qID,
+    qgID: req.body.qgID,
+    type: req.body.type,
+    qContent: req.body.qContent
+  });
+  // result = User.addUser(user);
+  question.save().then((question) => {
+    res.send(question);
+  }, (e) => {
+    res.status(400).send('Add question false');
+  });
+});
+
+//getQuestionItem
+
+app.put('/question/:qID', (req, res) => {
+  var query = { qID: req.params.qID };
+
+  Question.findOneAndUpdate(query, {
+    qgID: req.body.qgID,
+    type: req.body.type,
+    qContent: req.body.qContent
+  }, {upsert:true}, (e, raw) => {
+    if (e) {
+      res.status(400).send('Update question group false');
+    }
+    res.send(raw);
+  });
+});
+
+app.delete('/question/:qID', (req, res) => {
+  var query = { qID: req.params.qID };
+
+  Question.findOneAndRemove(query, 
+    (e, raw) => {
+      if (e) {
+        res.status(400).send('Invalid qID supplied');
+      }
+    res.send(raw);
+  });
+});
+
+/* End Question route */
 
 module.exports = app;
