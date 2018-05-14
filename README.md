@@ -48,3 +48,4 @@ URL data: [https://mlab.com/databases/multiple-choice-online](https://mlab.com/d
 - Update bank, group, question CRUD
 - Update API document.
 - Update ID from integer to string
+- Update main js name
