@@ -7,11 +7,11 @@ const {User} = require('../models/user');
 const {Bank} = require('../models/bank');
 const {Group} = require('../models/group');
 const {Question} = require('../models/question');
+const {QuestionItem} = require('../models/questionItem');
 
 app.use(bodyParser.json())
 
-
-/* User route */
+//region User route
 app.get('/user', (req, res) => {
   User.find().then((user) => {
     res.send({user});
@@ -82,9 +82,9 @@ app.delete('/user/:userID', (req, res) => {
   });
 });
 
-/* End user route */
+//endregion
 
-/* Bank route */
+//region Bank route
 app.get('/bank', (req, res) => {
   Bank.find().then((bank) => {
     res.send({bank});
@@ -143,10 +143,9 @@ app.delete('/bank/:qbID', (req, res) => {
     res.send(raw);
   });
 });
-/* End bank route */
+//endregion
 
-
-/* Group route */
+//region Group route
 app.get('/group', (req, res) => {
   Group.find().then((group) => {
     res.send({group});
@@ -206,9 +205,9 @@ app.delete('/group/:qbID', (req, res) => {
     res.send(raw);
   });
 });
-/* End group route */
+//endregion
 
-/* Question route */
+//region Question route
 app.get('/question', (req, res) => {
   Question.find().then((question) => {
     res.send({question});
@@ -228,11 +227,19 @@ app.post('/question', (req, res) => {
   question.save().then((question) => {
     res.send(question);
   }, (e) => {
-    res.status(400).send('Add question false');
+    res.status(400).send('Add question item false');
   });
 });
 
-//getQuestionItem
+app.get('/question/:qID', (req, res) => {
+  var query = { qID: req.params.qID };
+
+  QuestionItem.find(query).then((questionItem) => {
+    res.send({questionItem});
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
 
 app.put('/question/:qID', (req, res) => {
   var query = { qID: req.params.qID };
@@ -261,6 +268,54 @@ app.delete('/question/:qID', (req, res) => {
   });
 });
 
-/* End Question route */
+//endregion
+
+//region Question item route
+
+app.post('/question/:qID', (req, res) => {
+
+  var questionItem = new QuestionItem({
+    qiID: req.body.qiID,
+    qID: req.params.qID,
+    qiContent: req.body.qiContent,
+    note: req.body.note,
+    answer: req.body.answer,
+  });
+  questionItem.save().then((questionItem) => {
+    res.send(questionItem);
+  }, (e) => {
+    res.status(400).send('Add question item false');
+  });
+});
+
+app.put('/question/:qID/:qiID', (req, res) => {
+  var query = { qiID: req.params.qiID };
+
+  QuestionItem.findOneAndUpdate(query, {
+    qID: req.params.qID,
+    qiContent: req.body.qiContent,
+    note: req.body.note,
+    answer: req.body.answer,
+  }, {upsert:true}, (e, raw) => {
+    if (e) {
+      res.status(400).send('Update question group false');
+    }
+    res.send(raw);
+  });
+});
+
+app.delete('/question/:qID/:qiID', (req, res) => {
+  var query = { qiID: req.params.qiID };
+
+  QuestionItem.findOneAndRemove(query, 
+    (e, raw) => {
+      if (e) {
+        res.status(400).send('Invalid qID supplied');
+      }
+    res.send(raw);
+  });
+});
+
+//endregion
 
 module.exports = app;

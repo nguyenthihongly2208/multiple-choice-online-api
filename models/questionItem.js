@@ -3,30 +3,33 @@ const Schema = mongoose.Schema;
 const db = require('../utils/db');
 const autoIncrement = require('mongoose-auto-increment');
 
-var questionSchema = new Schema ({
-    qID: {
+var questionItemSchema = new Schema ({
+    qiID: {
         type: Number, 
         required: true, 
         unique: true},  
-    qgID: {
+    qID: {
         type: Number, 
         required: true,    
     },
-    type: {
+    qiContent: {
         type: String, 
         required: true,   
     },
-    qContent: {
-        type: String, 
-        required: true,   
+    note: {
+        type: String
+    },
+    answer: {
+        type: Boolean,
+        required: true,
     },
     dateAdded : { type: Date, default: Date.now },
 })
 
-const Question = mongoose.model('Question', questionSchema);
+const QuestionItem = mongoose.model('QuestionItem', questionItemSchema);
 autoIncrement.initialize(mongoose.connection);
-questionSchema.plugin(autoIncrement.plugin, { model: 'Question', field: 'qID' });
+questionItemSchema.plugin(autoIncrement.plugin, { model: 'QuestionItem', field: 'qiID' });
 
 module.exports = {
-    Question
+    QuestionItem
 };

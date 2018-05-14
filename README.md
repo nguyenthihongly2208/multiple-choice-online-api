@@ -6,7 +6,7 @@ Backend using RESTful JSON api using Nodejs, Express and MongoDB
 ![Document version](https://img.shields.io/badge/docs%20version-v0.2.0-blue.svg)
 ![Project version](https://img.shields.io/badge/project%20version-v0.1.0-blue.svg)
 ![Build passing](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Goal progress](https://img.shields.io/badge/goal%20progress%3A-22%25-red.svg)
+![Goal progress](https://img.shields.io/badge/goal%20progress%3A-35%25-yellowgreen.svg)
 
 ## API Document vs swagger
 Project use swagger to write document API. 
@@ -35,6 +35,9 @@ Use https://mlab.com make MongoDB hosting
 
 URL data: [https://mlab.com/databases/multiple-choice-online](https://mlab.com/databases/multiple-choice-online)
 
+## Server online: 
+URL Server : [multiple-choice-online-api.herokuapp.com](multiple-choice-online-api.herokuapp.com)
+
 ## Changle log:
 ### [0.0.1] - 2018-05-10
 - Add framwork to project.
@@ -47,7 +50,7 @@ URL data: [https://mlab.com/databases/multiple-choice-online](https://mlab.com/d
 - Get/put user/{userID} route. 
 - Update API document.
 ### [0.1.0] - 2018-05-14
-- Update bank, group, question CRUD
+- Update bank, group, question, question Item CRUD
 - Update API document.
 - Update main js name
 - Add mongoose-auto-increment
