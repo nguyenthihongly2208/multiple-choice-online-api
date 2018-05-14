@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const db = require('../utils/db');
+const autoIncrement = require('mongoose-auto-increment');
 
 var userSchema = new Schema({
     userID: {
-        type: String, 
+        type: Number, 
         required: true, 
-        unique: true},   
+        unique: true},
 	email: {
         type: String, 
         required: true, 
@@ -27,6 +28,8 @@ var userSchema = new Schema({
 })
 
 const User = mongoose.model('User', userSchema);
+autoIncrement.initialize(mongoose.connection);
+userSchema.plugin(autoIncrement.plugin, { model: 'User', field: 'userID' });
 
 module.exports = {
     User

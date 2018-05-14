@@ -20,12 +20,14 @@ URL API document : [https://app.swaggerhub.com/apis/huynhduckhoan/multiple-choic
 npm install express --save
 npm install mongoose --save
 npm install body-parser --save
+npm install mongoose-auto-increment --save
 ```
 <!-- npm install cookie-parser --save
 npm install multer --save -->
 * body-parser - This a class body-parser, json handler....
 * mongoose - mongodb connect, save...
 * express - Http support and... 
+* mongoose-auto-increment - Auto increment on *ID
 <!-- * cookie-parser- Chuyển đổi header của Cookie và phân bố đến các req.cookies -->
 <!-- * multer - Đây là một thành phần trung gian trong node.js để xử lí phần multipart/form-data. -->
 
@@ -47,5 +49,5 @@ URL data: [https://mlab.com/databases/multiple-choice-online](https://mlab.com/d
 ### [0.1.0] - 2018-05-14
 - Update bank, group, question CRUD
 - Update API document.
-- Update ID from integer to string
 - Update main js name
+- Add mongoose-auto-increment

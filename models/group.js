@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const db = require('../utils/db');
+const autoIncrement = require('mongoose-auto-increment');
 
 var groupSchema = new Schema ({
     qgID: {
-        type: String, 
+        type: Number, 
         required: true, 
         unique: true},  
     qbID: {
@@ -22,6 +23,8 @@ var groupSchema = new Schema ({
 })
 
 const Group = mongoose.model('Group', groupSchema);
+autoIncrement.initialize(mongoose.connection);
+groupSchema.plugin(autoIncrement.plugin, { model: 'Group', field: 'qgID' });
 
 module.exports = {
     Group
