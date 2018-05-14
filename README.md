@@ -6,12 +6,12 @@ Backend using RESTful JSON api using Nodejs, Express and MongoDB
 ![Document version](https://img.shields.io/badge/docs%20version-v0.2.0-blue.svg)
 ![Project version](https://img.shields.io/badge/project%20version-v0.0.0-blue.svg)
 ![Build passing](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Goal progress](https://img.shields.io/badge/goal%20progress%3A-5%25-red.svg)
+![Goal progress](https://img.shields.io/badge/goal%20progress%3A-22%25-red.svg)
 
 ## API Document vs swagger
 Project use swagger to write document API. 
 
-URL API document : [https://app.swaggerhub.com/apis/huynhduckhoan/multiple-choice-online/0.2.2](https://app.swaggerhub.com/apis/huynhduckhoan/multiple-choice-online/0.2.2)
+URL API document : [https://app.swaggerhub.com/apis/huynhduckhoan/multiple-choice-online/0.2.3](https://app.swaggerhub.com/apis/huynhduckhoan/multiple-choice-online/0.2.3)
 
 ## Using Nodejs, Express and MongoDB
 
@@ -44,4 +44,7 @@ URL data: [https://mlab.com/databases/multiple-choice-online](https://mlab.com/d
 - Get/post user route. 
 - Get/put user/{userID} route. 
 - Update API document.
-
+### [0.1.0] - 2018-05-14
+- Update bank, group
+- Update API document.
+- Update ID from interger to string
