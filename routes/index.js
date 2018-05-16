@@ -8,10 +8,14 @@ const {Bank} = require('../models/bank');
 const {Group} = require('../models/group');
 const {Question} = require('../models/question');
 const {QuestionItem} = require('../models/questionItem');
+const {Exam} = require('../models/exam');
+const {ExamQuestion} = require('../models/examQuestion');
+const {ExamStudent} = require('../models/examStudent');
+const {ExamStudentDetail} = require('../models/examStudentDetail');
 
 app.use(bodyParser.json())
 
-//region User route
+//region user route
 app.get('/user', (req, res) => {
   User.find().then((user) => {
     res.send({user});
@@ -84,7 +88,7 @@ app.delete('/user/:userID', (req, res) => {
 
 //endregion
 
-//region Bank route
+//region bank route
 app.get('/bank', (req, res) => {
   Bank.find().then((bank) => {
     res.send({bank});
@@ -99,7 +103,6 @@ app.post('/bank', (req, res) => {
     qbName: req.body.qbName,
     qbDescription: req.body.qbDescription,
   });
-  // result = User.addUser(user);
   bank.save().then((bank) => {
     res.send(bank);
   }, (e) => {
@@ -145,7 +148,7 @@ app.delete('/bank/:qbID', (req, res) => {
 });
 //endregion
 
-//region Group route
+//region group route
 app.get('/group', (req, res) => {
   Group.find().then((group) => {
     res.send({group});
@@ -207,7 +210,7 @@ app.delete('/group/:qbID', (req, res) => {
 });
 //endregion
 
-//region Question route
+//region question route
 app.get('/question', (req, res) => {
   Question.find().then((question) => {
     res.send({question});
@@ -223,7 +226,6 @@ app.post('/question', (req, res) => {
     type: req.body.type,
     qContent: req.body.qContent
   });
-  // result = User.addUser(user);
   question.save().then((question) => {
     res.send(question);
   }, (e) => {
@@ -270,7 +272,7 @@ app.delete('/question/:qID', (req, res) => {
 
 //endregion
 
-//region Question item route
+//region question item route
 
 app.post('/question/:qID', (req, res) => {
 
@@ -316,6 +318,150 @@ app.delete('/question/:qID/:qiID', (req, res) => {
   });
 });
 
+//endregion
+
+//region exam item route
+
+app.get('/exam', (req, res) => {
+  Exam.find().then((exam) => {
+    res.send({exam});
+  }, (e) => {
+    res.status(404).send('Exam not found');
+  });
+});
+
+app.post('/exam', (req, res) => {
+
+  var exam = new Exam({
+    eID: req.body.eID,
+    eDescription: req.body.eDescription,
+    questionsNumber: req.body.questionsNumber,
+    time: req.body.time,
+  });
+  exam.save().then((exam) => {
+    res.send(exam);
+  }, (e) => {
+    res.status(400).send('Add exam false');
+  });
+});
+
+app.get('/exam/:eID', (req, res) => {
+  var query = { eID: req.params.eID };
+  ExamQuestion.find(query).then((examQuestion) => {
+      var questions = [];
+      var qIDs = [];
+      for (i in examQuestion) {
+        qIDs.push(examQuestion[i].qID);
+      }
+      Question.find({
+        'qID': { $in: qIDs }
+      }).then((question) => {
+        res.send(question);
+      });
+      console.log(questions);
+    }, (e) => {
+    res.status(400).send(e);
+  });
+
+});
+
+app.post('/exam/:eID', (req, res) => {
+
+  var examQuestion = new ExamQuestion({
+    eqID: req.body.eID,
+    eID: req.params.eID,
+    qID: req.body.qID,
+  });
+  examQuestion.save().then((examQuestion) => {
+    res.send(examQuestion);
+  }, (e) => {
+    res.status(404).send('Exam not found');
+  });
+});
+
+app.put('/exam/:eID', (req, res) => {
+  var query = { eID: req.params.eID };
+
+  Exam.findOneAndUpdate(query, {
+    eDescription: req.body.eDescription,
+    questionsNumber: req.body.questionsNumber,
+    time: req.body.time,
+  }, {upsert:true}, (e, raw) => {
+    if (e) {
+      res.status(404).send('Exam not found');
+    }
+    res.send(raw);
+  });
+});
+
+app.delete('/exam/:eID', (req, res) => {
+  var query = { eID: req.params.eID };
+
+  Exam.findOneAndRemove(query, 
+    (e, raw) => {
+      if (e) {
+        res.status(404).send('Exam not found');
+      }
+    res.send(raw);
+  });
+});
+
+//endregion
+
+//region student route
+
+app.get('/student', (req, res) => {
+  ExamStudent.find().then((examStudent) => {
+    res.send({examStudent});
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
+
+app.post('/student', (req, res) => {
+    var examStudent = new ExamStudent({
+        esID: req.body.esID,
+        eID: req.body.eID,
+        userID: req.body.userID,
+        status: req.body.status,
+        mark: req.body.mark,
+    });
+    examStudent.save().then((examStudent) => {
+      res.send(examStudent);
+    }, (e) => {
+      res.status(400).send(e);
+    });
+});
+
+//endregion
+
+//region student route
+
+app.post('/studentdetail', (req, res) => {
+    var examStudentDetail = new ExamStudentDetail({
+        esdID: req.body.esdID,
+        esID: req.body.esID,
+        eqID: req.body.eqID,
+        responseChoice: req.body.responseChoice,
+    });
+    examStudentDetail.save().then((examStudentDetail) => {
+      res.send(examStudentDetail);
+    }, (e) => {
+      res.status(400).send(e);
+    });
+});
+
+app.get('/studentdetail/:esID', (req, res) => {
+  var query = { esID: req.params.esID };
+
+  ExamStudentDetail.find(query).then((examStudentDetail) => {
+    res.send(examStudentDetail);
+  }, (e) => {
+    res.status(404).send('Question not found');
+  });
+
+});
 //endregion
 
 module.exports = app;
