@@ -14,9 +14,19 @@ var examSchema = new Schema ({
     },
     questionsNumber: {
         type: Number, 
+        required: true,   
     },
     time: {
         type: Number, 
+        required: true,   
+    },
+    qbID: {
+        type: Number, 
+        required: true,   
+    },
+    isRandom: {
+        type: Boolean,
+        required: true,   
     },
     dateAdded : { type: Date, default: Date.now },
 })

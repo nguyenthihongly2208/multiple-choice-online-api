@@ -7,14 +7,15 @@ var examQuestionSchema = new Schema ({
     eqID: {
         type: Number, 
         required: true, 
-        unique: true},  
+        unique: true
+    },  
     eID: {
         type: Number, 
-        required: true,   
+        required: true,
     },
     qID: {
         type: Number, 
-        required: true,   
+        required: true, 
     },
     dateAdded : { type: Date, default: Date.now },
 })

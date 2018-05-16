@@ -1,11 +1,12 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
+const _ = require('lodash');
 
 const db = require('../utils/db');
 const {User} = require('../models/user');
 const {Bank} = require('../models/bank');
-const {Group} = require('../models/group');
+// const {Group} = require('../models/group');
 const {Question} = require('../models/question');
 const {QuestionItem} = require('../models/questionItem');
 const {Exam} = require('../models/exam');
@@ -76,7 +77,6 @@ app.put('/user/:userID', (req, res) => {
 
 app.delete('/user/:userID', (req, res) => {
   var query = { userID: req.params.userID };
-
   User.findOneAndRemove(query, 
     (e, raw) => {
       if (e) {
@@ -113,10 +113,10 @@ app.post('/bank', (req, res) => {
 app.get('/bank/:qbID', (req, res) => {
   var query = { qbID: req.params.qbID };
 
-  Group.find(query).then((group) => {
-    res.send(group);
+  Question.find(query).then((question) => {
+    res.send(question);
   }, (e) => {
-    res.status(400).send(e);
+    res.status(404).send('Question Bank not found');
   });
 
 });
@@ -148,68 +148,6 @@ app.delete('/bank/:qbID', (req, res) => {
 });
 //endregion
 
-//region group route
-app.get('/group', (req, res) => {
-  Group.find().then((group) => {
-    res.send({group});
-  }, (e) => {
-    res.status(400).send(e);
-  });
-});
-
-app.post('/group', (req, res) => {
-  var group = new Group({
-    qgID: req.body.qgID,
-    qbID: req.body.qbID,
-    qgName: req.body.qgName,
-    qgDescription: req.body.qgDescription
-  });
-  group.save().then((group) => {
-    res.send(group);
-  }, (e) => {
-    res.status(400).send(e);
-  });
-});
-
-app.get('/group/:qgID', (req, res) => {
-  var query = { qgID: req.params.qgID };
-
-  Question.find(query).then((group) => {
-    res.send(group);
-  }, (e) => {
-    res.status(404).send('Question not found');
-  });
-
-});
-
-app.put('/group/:qgID', (req, res) => {
-  var query = { qgID: req.params.qgID };
-
-  Group.findOneAndUpdate(query, {
-    qbID: req.body.qbID,
-    qgName: req.body.qgName,
-    qgDescription: req.body.qgDescription
-  }, {upsert:true}, (e, raw) => {
-    if (e) {
-      res.status(400).send('Update question group false');
-    }
-    res.send(raw);
-  });
-});
-
-app.delete('/group/:qbID', (req, res) => {
-  var query = { qgID: req.params.qgID };
-
-  Group.findOneAndRemove(query, 
-    (e, raw) => {
-      if (e) {
-        res.status(400).send('Invalid qbID supplied');
-      }
-    res.send(raw);
-  });
-});
-//endregion
-
 //region question route
 app.get('/question', (req, res) => {
   Question.find().then((question) => {
@@ -222,7 +160,7 @@ app.get('/question', (req, res) => {
 app.post('/question', (req, res) => {
   var question = new Question({
     qID: req.body.qID,
-    qgID: req.body.qgID,
+    qbID: req.body.qbID,
     type: req.body.type,
     qContent: req.body.qContent
   });
@@ -247,7 +185,7 @@ app.put('/question/:qID', (req, res) => {
   var query = { qID: req.params.qID };
 
   Question.findOneAndUpdate(query, {
-    qgID: req.body.qgID,
+    qbID: req.body.qbID,
     type: req.body.type,
     qContent: req.body.qContent
   }, {upsert:true}, (e, raw) => {
@@ -331,14 +269,39 @@ app.get('/exam', (req, res) => {
 });
 
 app.post('/exam', (req, res) => {
-
+  var  isRandom = req.body.isRandom;
+  var qbID = req.body.qbID;
+  var questionsNumber = req.body.questionsNumber;
   var exam = new Exam({
     eID: req.body.eID,
     eDescription: req.body.eDescription,
-    questionsNumber: req.body.questionsNumber,
+    questionsNumber: questionsNumber,
     time: req.body.time,
+    qbID: qbID,
+    isRandom: isRandom,
   });
   exam.save().then((exam) => {
+    if (isRandom === true){
+      Question.find({qbID: qbID}).then((question) => {
+        var qIDs = [];
+        for (i in question) {
+          qIDs.push(question[i].qID);
+        }
+        qIDsRandom = _.sampleSize(qIDs, questionsNumber);
+        console.log(qIDsRandom);
+        console.log(exam.eID);
+        
+        for (i in qIDsRandom) {
+          var examQuestion = new ExamQuestion({
+            eID: exam.eID,
+            qID: qIDsRandom[i],
+          });
+          examQuestion.save().then((examQuestion) => {
+            // res.send(examQuestion);
+          });        
+        }
+      });
+    }
     res.send(exam);
   }, (e) => {
     res.status(400).send('Add exam false');
@@ -348,7 +311,6 @@ app.post('/exam', (req, res) => {
 app.get('/exam/:eID', (req, res) => {
   var query = { eID: req.params.eID };
   ExamQuestion.find(query).then((examQuestion) => {
-      var questions = [];
       var qIDs = [];
       for (i in examQuestion) {
         qIDs.push(examQuestion[i].qID);
@@ -358,7 +320,6 @@ app.get('/exam/:eID', (req, res) => {
       }).then((question) => {
         res.send(question);
       });
-      console.log(questions);
     }, (e) => {
     res.status(400).send(e);
   });
@@ -375,7 +336,7 @@ app.post('/exam/:eID', (req, res) => {
   examQuestion.save().then((examQuestion) => {
     res.send(examQuestion);
   }, (e) => {
-    res.status(404).send('Exam not found');
+    res.status(400).send('Install exam false');
   });
 });
 

@@ -8,7 +8,7 @@ var questionSchema = new Schema ({
         type: Number, 
         required: true, 
         unique: true},  
-    qgID: {
+    qbID: {
         type: Number, 
         required: true,    
     },
