@@ -21,4 +21,4 @@
 ### [0.3.0] - 2018-05-16
 - Big update follow teacher.. :))
 - Update auto create radom question with bank question
-- 
+- Update document.
