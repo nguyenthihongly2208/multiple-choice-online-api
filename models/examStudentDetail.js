@@ -8,15 +8,18 @@ var examStudentDetailSchema = new Schema({
         type: Number, 
         required: true, 
         unique: true},
-    esID: {
+    userID: {
         type: Number, 
         required: true,},
-    eqID: { 
-        type: String, 
+    eID: { 
+        type: Number, 
         required: true },
-    responseChoice:  { 
-        type: String, 
-        required: true,},
+    qID: { 
+        type: Number, 
+        required: true },
+    qiID: { 
+        type: Number, 
+        required: true },
 	dateAdded : { type: Date, default: Date.now },
 })
 

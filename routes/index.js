@@ -400,21 +400,22 @@ app.post('/student', (req, res) => {
 //region student route
 
 app.post('/studentdetail', (req, res) => {
-    var examStudentDetail = new ExamStudentDetail({
-        esdID: req.body.esdID,
-        esID: req.body.esID,
-        eqID: req.body.eqID,
-        responseChoice: req.body.responseChoice,
+    var markStudent = 0;
+    req.body.forEach( (obj) => {
+      var examStudentDetail = new ExamStudentDetail({
+        userID: obj.userID,
+        eID: obj.eID,
+        qID: obj.qID,
+        qiID: obj.qiID,
+      });
+      examStudentDetail.save().then((examStudentDetail) => {
+      });  
     });
-    examStudentDetail.save().then((examStudentDetail) => {
-      res.send(examStudentDetail);
-    }, (e) => {
-      res.status(400).send(e);
-    });
+    res.send('Add success...');
 });
 
-app.get('/studentdetail/:esID', (req, res) => {
-  var query = { esID: req.params.esID };
+app.get('/studentdetail/:userID', (req, res) => {
+  var query = { userID: req.params.userID };
 
   ExamStudentDetail.find(query).then((examStudentDetail) => {
     res.send(examStudentDetail);
