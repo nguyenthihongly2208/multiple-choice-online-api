@@ -398,10 +398,11 @@ app.post('/student', (req, res) => {
 //endregion
 
 //region student route
+var async = require('async');
 
 app.post('/studentdetail', (req, res) => {
     var markStudent = 0;
-    req.body.forEach( (detail, idDetail, arrayDetail) => {
+    async.forEachOf(req.body, (detail, idDetail, done) => {
       var examStudentDetail = new ExamStudentDetail({
         userID: detail.userID,
         eID: detail.eID,
@@ -409,19 +410,33 @@ app.post('/studentdetail', (req, res) => {
         qiID: detail.qiID,
       });
       QuestionItem.find({qID:detail.qID}).then((questionItem) => {
-        questionItem.forEach((item) => {
+        async.forEachOf(questionItem, (item, idItem, call) => {
           if(item.qiID == detail.qiID && item.answer == true){
             markStudent++;
-            console.log('a' + markStudent + ' - ' + idDetail);
-            // if (idDetail === arrayDetail.length - 1){ 
-            //   console.log('b ' + markStudent + ' - ' + idDetail);
-            // }
+            console.log(markStudent + ' - ' + idDetail);
           }
+          call();
         })
       });
       examStudentDetail.save().then((examStudentDetail) => {
-      });  
-    });
+      }); 
+      done(); 
+    }), err => {
+      if (err) console.error(err.message);
+    }
+    setTimeout(() => { 
+      var examStudent = new ExamStudent({
+          eID: req.body[0].eID,
+          userID: req.body[0].userID,
+          mark: markStudent,
+          numberQuestion: req.body.length,
+      });
+      examStudent.save().then((examStudent) => {
+        console.log(examStudent);
+      }, (e) => {
+        res.status(400).send(e);
+      });
+    }, 60000);
     res.send('Add success...');
 });
 

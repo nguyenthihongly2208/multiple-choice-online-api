@@ -12,14 +12,15 @@ var examStudentSchema = new Schema({
         type: Number, 
         required: true,},
     userID: { 
-        type: String, 
+        type: Number, 
         required: true },
-    status:  { 
-        type: String, 
-        required: true,},
     mark: { 
-        type: String, 
+        type: Number, 
         required: true },
+    numberQuestion: {
+        type: Number,
+        required: true,
+    },
 	dateAdded : { type: Date, default: Date.now },
 })
 
