@@ -401,12 +401,23 @@ app.post('/student', (req, res) => {
 
 app.post('/studentdetail', (req, res) => {
     var markStudent = 0;
-    req.body.forEach( (obj) => {
+    req.body.forEach( (detail, idDetail, arrayDetail) => {
       var examStudentDetail = new ExamStudentDetail({
-        userID: obj.userID,
-        eID: obj.eID,
-        qID: obj.qID,
-        qiID: obj.qiID,
+        userID: detail.userID,
+        eID: detail.eID,
+        qID: detail.qID,
+        qiID: detail.qiID,
+      });
+      QuestionItem.find({qID:detail.qID}).then((questionItem) => {
+        questionItem.forEach((item) => {
+          if(item.qiID == detail.qiID && item.answer == true){
+            markStudent++;
+            console.log('a' + markStudent + ' - ' + idDetail);
+            // if (idDetail === arrayDetail.length - 1){ 
+            //   console.log('b ' + markStudent + ' - ' + idDetail);
+            // }
+          }
+        })
       });
       examStudentDetail.save().then((examStudentDetail) => {
       });  
@@ -414,6 +425,35 @@ app.post('/studentdetail', (req, res) => {
     res.send('Add success...');
 });
 
+// app.post('/studentdetail', (req, res) => {
+//   var markStudent = 0;
+//   for (var j = 0; j < req.body.length; j++) {
+//         var examStudentDetail = new ExamStudentDetail({
+//           userID:  req.body[j].userID,
+//           eID:  req.body[j].eID,
+//           qID:  req.body[j].qID,
+//           qiID:  req.body[j].qiID,
+//         });
+//         var qis = [];
+//         QuestionItem.find({qID: req.body[j].qID}).then((questionItem) => {
+//           for (var i = 0; i < questionItem.length; i++) {
+//             if(questionItem[i].qiID ==  req.body[j].qiID && questionItem[i].answer == true){
+//               markStudent++;
+//               console.log('a' + markStudent + ' - ' + j);
+//               // if (idDetail === arrayDetail.length - 1){ 
+//               //   console.log('b ' + markStudent + ' - ' + idDetail);
+//               // }
+//             }
+//           }
+//           // questionItem.forEach((item) => {
+    
+//           // })
+//         });
+//         examStudentDetail.save().then((examStudentDetail) => {
+//         });  
+//   }
+//   res.send('Add success...');
+// });
 app.get('/studentdetail/:userID', (req, res) => {
   var query = { userID: req.params.userID };
 
@@ -425,5 +465,7 @@ app.get('/studentdetail/:userID', (req, res) => {
 
 });
 //endregion
+
+
 
 module.exports = app;
