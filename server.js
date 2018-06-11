@@ -2,10 +2,10 @@ const db = require('./utils/db');
 const app = require('./routes');
 const PORT = process.env.PORT || 5000
 
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app.listen(PORT, () => console.log(`Listening on localhost:${ PORT }`))
 
 app.get('/', (req, res) => {
-    res.send('home')
+    res.send('version 0.3.3')
 })
 
 // Add headers
